@@ -15,7 +15,7 @@ const Index = () => {
       {/* Hero section with header integrated */}
       <div className="relative min-h-screen">
         {/* Background image for both header and hero */}
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.08]" style={{
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.15]" style={{
           backgroundImage: `url(/lovable-uploads/7846f98d-2713-4494-9578-18e49b6fb101.png)`
         }} />
         <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/95 to-background/97" />
