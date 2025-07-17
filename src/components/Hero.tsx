@@ -23,9 +23,11 @@ const Hero = () => {
       <div className="relative z-10 flex flex-col flex-1">
         {/* Centered logo at top */}
         <div className="flex justify-center pt-8 pb-16">
-          <div className="h-16 w-auto flex items-center justify-center bg-primary text-primary-foreground px-8 py-4 font-bold text-2xl font-red-hat">
-            HÉLIOS CRÉATIONS
-          </div>
+          <img 
+            src={heliosLogo} 
+            alt="Hélios Créations SA" 
+            className="h-16 w-auto"
+          />
         </div>
 
         {/* Main content */}
