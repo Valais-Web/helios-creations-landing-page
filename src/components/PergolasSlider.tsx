@@ -80,23 +80,23 @@ const PergolasSlider = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-primary/5 rounded-2xl p-8 md:p-12 border border-primary/10">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">?</span>
+        <div className="inline-flex items-center gap-6 bg-background/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg border border-border/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-bold">?</span>
             </div>
             <div className="text-left">
-              <h3 className="text-xl font-semibold text-foreground">
+              <h3 className="text-lg font-semibold text-foreground leading-tight">
                 Prêt à créer la vôtre ?
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 Recevez votre devis gratuit et personnalisé
               </p>
             </div>
           </div>
           
-          <Button size="lg" className="font-semibold px-8">
-            Demander un devis gratuit
+          <Button className="font-semibold px-6 whitespace-nowrap">
+            Demander un devis
           </Button>
         </div>
       </div>
