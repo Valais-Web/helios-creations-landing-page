@@ -1,3 +1,4 @@
+
 import { Check } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -72,6 +73,13 @@ const FeaturesSection = () => {
               className="absolute inset-0"
             />
           </div>
+        </div>
+
+        {/* CTA Button */}
+        <div className="text-center mt-12">
+          <button className="btn-helios-cta">
+            DEMANDEZ UN DEVIS GRATUIT
+          </button>
         </div>
       </div>
     </section>
