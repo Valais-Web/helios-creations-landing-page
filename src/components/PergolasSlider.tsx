@@ -5,19 +5,15 @@ import pergola1 from '@/assets/pergola-1.jpg';
 import pergola2 from '@/assets/pergola-2.jpg';
 import pergola3 from '@/assets/pergola-3.jpg';
 import pergola4 from '@/assets/pergola-4.jpg';
-
 const PergolasSlider = () => {
   const images = [pergola1, pergola2, pergola3, pergola4];
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex(prev => (prev + 1) % images.length);
   };
-
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex(prev => (prev - 1 + images.length) % images.length);
   };
-
   const getVisibleImages = () => {
     const result = [];
     for (let i = 0; i < 3; i++) {
@@ -29,9 +25,7 @@ const PergolasSlider = () => {
     }
     return result;
   };
-
-  return (
-    <section className="section-padding bg-muted/30">
+  return <section className="section-padding bg-muted/30">
       <div className="max-w-7xl mx-auto text-center">
         {/* Header */}
         <div className="mb-12">
@@ -47,34 +41,17 @@ const PergolasSlider = () => {
         {/* Image Gallery */}
         <div className="relative mb-12">
           <div className="flex justify-center items-center gap-4 md:gap-6">
-            {getVisibleImages().map((image, i) => (
-              <div 
-                key={`${image.index}-${i}`}
-                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ${
-                  i === 1 ? 'w-80 h-64 md:w-96 md:h-72 scale-105 z-10' : 'w-64 h-48 md:w-80 md:h-60 opacity-80'
-                }`}
-              >
-                <img
-                  src={image.src}
-                  alt={`Pergola réalisation ${image.index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
+            {getVisibleImages().map((image, i) => <div key={`${image.index}-${i}`} className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ${i === 1 ? 'w-80 h-64 md:w-96 md:h-72 scale-105 z-10' : 'w-64 h-48 md:w-80 md:h-60 opacity-80'}`}>
+                <img src={image.src} alt={`Pergola réalisation ${image.index + 1}`} className="w-full h-full object-cover" />
+              </div>)}
           </div>
 
           {/* Navigation Buttons */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
-          >
+          <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105">
             <ChevronLeft className="w-6 h-6 text-primary" />
           </button>
           
-          <button
-            onClick={nextSlide}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
-          >
+          <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105">
             <ChevronRight className="w-6 h-6 text-primary" />
           </button>
         </div>
@@ -83,7 +60,7 @@ const PergolasSlider = () => {
         <div className="inline-flex items-center gap-6 bg-background/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg border border-border/50">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold">?</span>
+              <span className="text-white font-bold">➞</span>
             </div>
             <div className="text-left">
               <h3 className="text-lg font-semibold text-foreground leading-tight">
@@ -95,13 +72,9 @@ const PergolasSlider = () => {
             </div>
           </div>
           
-          <Button className="font-semibold px-6 whitespace-nowrap">
-            Demander un devis
-          </Button>
+          <Button className="font-semibold px-6 whitespace-nowrap">Demander un devis gratuit</Button>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default PergolasSlider;
