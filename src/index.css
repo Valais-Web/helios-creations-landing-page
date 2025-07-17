@@ -125,6 +125,12 @@ All colors MUST be HSL.
     border-radius: 0;
   }
 
+  .btn-helios-cta {
+    @apply px-14 py-5 uppercase font-medium tracking-wider transition-all duration-300;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:scale-105;
+    border-radius: 0;
+  }
+
   /* Section spacing */
   .section-padding {
     @apply px-5 py-20 md:px-20;
