@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -19,19 +12,18 @@ const ContactForm = () => {
     message: '',
     callbackTime: ''
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Ici vous pourriez ajouter la logique d'envoi du formulaire
   };
-
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
-
-  return (
-    <section className="section-padding bg-gray-50">
+  return <section className="section-padding bg-gray-50">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Prêt à profiter de votre extérieur ?
@@ -43,26 +35,14 @@ const ContactForm = () => {
               <label className="block text-foreground font-rubik font-medium mb-2">
                 Nom / Prénom *
               </label>
-              <Input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                className="w-full"
-              />
+              <Input type="text" required value={formData.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full" />
             </div>
             
             <div>
               <label className="block text-foreground font-rubik font-medium mb-2">
                 Email *
               </label>
-              <Input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full"
-              />
+              <Input type="email" required value={formData.email} onChange={e => handleInputChange('email', e.target.value)} className="w-full" />
             </div>
           </div>
           
@@ -71,26 +51,14 @@ const ContactForm = () => {
               <label className="block text-foreground font-rubik font-medium mb-2">
                 Téléphone *
               </label>
-              <Input
-                type="tel"
-                required
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
-                className="w-full"
-              />
+              <Input type="tel" required value={formData.phone} onChange={e => handleInputChange('phone', e.target.value)} className="w-full" />
             </div>
             
             <div>
               <label className="block text-foreground font-rubik font-medium mb-2">
                 Code Postal *
               </label>
-              <Input
-                type="text"
-                required
-                value={formData.postalCode}
-                onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                className="w-full"
-              />
+              <Input type="text" required value={formData.postalCode} onChange={e => handleInputChange('postalCode', e.target.value)} className="w-full" />
             </div>
           </div>
           
@@ -98,7 +66,7 @@ const ContactForm = () => {
             <label className="block text-foreground font-rubik font-medium mb-2">
               Quand pouvons-nous vous rappeler ? *
             </label>
-            <Select onValueChange={(value) => handleInputChange('callbackTime', value)}>
+            <Select onValueChange={value => handleInputChange('callbackTime', value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sélectionnez un créneau" />
               </SelectTrigger>
@@ -112,16 +80,8 @@ const ContactForm = () => {
           </div>
           
           <div>
-            <label className="block text-foreground font-rubik font-medium mb-2">
-              Message personnalisé
-            </label>
-            <Textarea
-              rows={5}
-              value={formData.message}
-              onChange={(e) => handleInputChange('message', e.target.value)}
-              className="w-full"
-              placeholder="Décrivez votre projet..."
-            />
+            <label className="block text-foreground font-rubik font-medium mb-2">Votre message</label>
+            <Textarea rows={5} value={formData.message} onChange={e => handleInputChange('message', e.target.value)} className="w-full" placeholder="Décrivez votre projet..." />
           </div>
           
           <div className="text-center">
@@ -131,8 +91,6 @@ const ContactForm = () => {
           </div>
         </form>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactForm;
