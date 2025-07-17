@@ -1,10 +1,11 @@
 
+
 const TestimonialsSection = () => {
   const testimonials = [
     {
       location: "Fribourg",
       text: "Nous sommes ravis de notre pergola bioclimatique d'Hélios. Leurs services sont efficaces, de qualité, réactifs et à ce prix ! Quel bel investissement !",
-      image: "/lovable-uploads/9b0a9fbd-5a55-4a4f-a25b-1d4465c4c7eb.png"
+      image: "/lovable-uploads/6d2657b8-4d27-4e2f-b9b8-cdf532e50db2.png"
     },
     {
       location: "Portalban", 
@@ -14,7 +15,7 @@ const TestimonialsSection = () => {
     {
       location: "Conthey",
       text: "Nous avons été agréablement surpris par le résultat sur une pergola avec les côtés vitrés. Le tout avec un budget maîtrisé. Nous recommandons sans hésiter Hélios Créations !",
-      image: "/lovable-uploads/6d2657b8-4d27-4e2f-b9b8-cdf532e50db2.png"
+      image: "/lovable-uploads/9b0a9fbd-5a55-4a4f-a25b-1d4465c4c7eb.png"
     }
   ];
 
@@ -63,3 +64,4 @@ const TestimonialsSection = () => {
 };
 
 export default TestimonialsSection;
+
