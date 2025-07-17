@@ -1,3 +1,4 @@
+
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import PresentationSection from '@/components/PresentationSection';
@@ -25,7 +26,7 @@ const Index = () => {
           <Hero />
         </div>
       </div>
-      <div className="bg-background">
+      <div>
         <PresentationSection />
         <PergolasSlider />
         <FeaturesSection />

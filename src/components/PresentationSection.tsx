@@ -1,6 +1,6 @@
 const PresentationSection = () => {
   return (
-    <section className="section-padding bg-gray-50">
+    <section className="section-padding bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Large Image */}

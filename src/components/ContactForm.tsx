@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,7 +28,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="section-padding bg-gray-50">
+    <section className="section-padding bg-background">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Prêt à profiter de votre extérieur ?
