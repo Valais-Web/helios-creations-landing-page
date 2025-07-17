@@ -7,7 +7,7 @@ const PresentationSection = () => {
           <div className="order-2 lg:order-1">
             <div className="relative group">
               <img 
-                src="/lovable-uploads/b828edb1-c20d-4d80-87dd-49e513f6a77f.png" 
+                src="/lovable-uploads/ee9d1e67-5715-4992-8cc9-8adc2809cf5c.png" 
                 alt="Pergola bioclimatique moderne - Hélios Créations" 
                 className="w-full h-auto rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-300 transform group-hover:scale-[1.02]" 
               />
