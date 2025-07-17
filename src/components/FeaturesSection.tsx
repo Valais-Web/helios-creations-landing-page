@@ -25,16 +25,16 @@ const FeaturesSection = () => {
     : "https://www.youtube.com/embed/9PrgaUNNLWw?start=3&controls=1";
 
   const features = [
-    "Espaces de vie élargis",
+    "Structure durable en aluminium",
     "Lames orientables", 
     "Capteur vent/pluie/soleil",
     "Contrôle via l'application",
     "Motorisation automatique",
-    "Haute perf. fiabilité/durabilité",
-    "Résiste au courant jusqu'à 115 km/h",
+    "Hauts-parleurs Bluetooth",
+    "Prises de courant et USB",
     "Éclairage LED intégré",
     "Chauffage infrarouge",
-    "Fermeture des côtés vitrés",
+    "Fermetures latérales",
     "Complètement personnalisable",
     "Et plus encore..."
   ];
