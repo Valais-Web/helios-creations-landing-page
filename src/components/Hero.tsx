@@ -1,14 +1,12 @@
 import { Check, Star } from 'lucide-react';
-import heroImage from '@/assets/hero-pergola.jpg';
-import heliosLogo from '@/assets/helios-logo.png';
 const Hero = () => {
   const benefits = ["Profitez d'une pergola bioclimatique personnalisée qui correspondra à votre style", "Des produits de qualité supérieure avec le souci intégral du détail", "Installations professionnelles, durables et de qualité partout en Suisse Romande", "Adapté à votre budget et vos besoins"];
   return <section className="relative min-h-screen flex flex-col">
       {/* Background image with overlay */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5" style={{
-      backgroundImage: `url(${heroImage})`
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.03]" style={{
+      backgroundImage: `url(/lovable-uploads/98178adf-676f-4df9-900b-60c69a214e8a.png)`
     }} />
-      <div className="absolute inset-0 bg-background/95" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
       
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1">
@@ -20,7 +18,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-red-hat text-primary mb-8 leading-tight">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-red-hat text-primary mb-8 leading-tight animate-fade-in">
                   Profitez de votre jardin toute l'année avec nos pergolas bioclimatiques
                 </h1>
                 
@@ -33,7 +31,7 @@ const Hero = () => {
                     </li>)}
                 </ul>
 
-                <button className="btn-helios-cta mb-8">
+                <button className="btn-helios-cta mb-8 hover-scale">
                   Demander un devis gratuit
                 </button>
 
@@ -53,7 +51,14 @@ const Hero = () => {
               </div>
               
               <div className="order-1 lg:order-2">
-                <img src={heroImage} alt="Pergola bioclimatique Hélios Créations" className="w-full h-auto rounded-lg shadow-xl" />
+                <div className="relative group">
+                  <img 
+                    src="/lovable-uploads/9882f6b3-2664-43eb-874a-38a527d25447.png" 
+                    alt="Pergola bioclimatique avec famille - Hélios Créations" 
+                    className="w-full h-auto rounded-2xl shadow-2xl group-hover:shadow-3xl transition-all duration-300 transform group-hover:scale-[1.02]" 
+                  />
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
               </div>
             </div>
           </div>
