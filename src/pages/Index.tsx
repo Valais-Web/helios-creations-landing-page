@@ -3,7 +3,6 @@ import Hero from '@/components/Hero';
 import PresentationSection from '@/components/PresentationSection';
 import PergolasSlider from '@/components/PergolasSlider';
 import FeaturesSection from '@/components/FeaturesSection';
-import AutoplayVideo from '@/components/AutoplayVideo';
 import CompanySection from '@/components/CompanySection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import ContactForm from '@/components/ContactForm';
@@ -30,7 +29,6 @@ const Index = () => {
         <PresentationSection />
         <PergolasSlider />
         <FeaturesSection />
-        <AutoplayVideo />
         <CompanySection />
         <TestimonialsSection />
         <ContactForm />
