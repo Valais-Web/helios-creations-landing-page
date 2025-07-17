@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import pergola1 from '@/assets/pergola-1.jpg';
 import pergola2 from '@/assets/pergola-2.jpg';
 import pergola3 from '@/assets/pergola-3.jpg';
@@ -8,37 +10,94 @@ const PergolasSlider = () => {
   const images = [pergola1, pergola2, pergola3, pergola4];
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 4000);
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
 
-    return () => clearInterval(interval);
-  }, [images.length]);
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const getVisibleImages = () => {
+    const result = [];
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % images.length;
+      result.push({
+        src: images[index],
+        index: index
+      });
+    }
+    return result;
+  };
 
   return (
-    <section className="section-padding">
-      <div className="max-w-6xl mx-auto">
-        <div className="relative">
-          <div className="overflow-hidden rounded-lg shadow-lg">
-            <img
-              src={images[currentIndex]}
-              alt={`Pergola réalisation ${currentIndex + 1}`}
-              className="w-full h-[500px] object-cover transition-opacity duration-500"
-            />
-          </div>
-          
-          <div className="flex justify-center mt-6 space-x-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                  index === currentIndex ? 'bg-primary' : 'bg-gray-300'
+    <section className="section-padding bg-muted/30">
+      <div className="max-w-7xl mx-auto text-center">
+        {/* Header */}
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            Inspirez-vous
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Découvrez nos réalisations récentes. Des pergolas bioclimatiques sur-mesure qui allient 
+            isolation, sécurité et design pour s'adapter parfaitement à votre architecture.
+          </p>
+        </div>
+
+        {/* Image Gallery */}
+        <div className="relative mb-12">
+          <div className="flex justify-center items-center gap-4 md:gap-6">
+            {getVisibleImages().map((image, i) => (
+              <div 
+                key={`${image.index}-${i}`}
+                className={`relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 ${
+                  i === 1 ? 'w-80 h-64 md:w-96 md:h-72 scale-105 z-10' : 'w-64 h-48 md:w-80 md:h-60 opacity-80'
                 }`}
-              />
+              >
+                <img
+                  src={image.src}
+                  alt={`Pergola réalisation ${image.index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             ))}
           </div>
+
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
+          >
+            <ChevronLeft className="w-6 h-6 text-primary" />
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
+          >
+            <ChevronRight className="w-6 h-6 text-primary" />
+          </button>
+        </div>
+
+        {/* CTA Section */}
+        <div className="bg-primary/5 rounded-2xl p-8 md:p-12 border border-primary/10">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">?</span>
+            </div>
+            <div className="text-left">
+              <h3 className="text-xl font-semibold text-foreground">
+                Prêt à créer la vôtre ?
+              </h3>
+              <p className="text-muted-foreground">
+                Recevez votre devis gratuit et personnalisé
+              </p>
+            </div>
+          </div>
+          
+          <Button size="lg" className="font-semibold px-8">
+            Demander un devis gratuit
+          </Button>
         </div>
       </div>
     </section>
