@@ -47,7 +47,7 @@ const Hero = () => {
                     {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                   </div>
                   <div className="text-sm text-gray-600">
-                    <span className="font-semibold">4.9</span> • Basé sur 47 avis
+                    <span className="font-semibold">4.7</span> • Basé sur 19 avis
                   </div>
                 </div>
               </div>
