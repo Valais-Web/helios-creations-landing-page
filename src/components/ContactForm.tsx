@@ -46,8 +46,8 @@ const ContactForm = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
-            <div className="absolute -bottom-6 -right-6 bg-primary text-primary-foreground px-6 py-3 rounded-lg shadow-lg">
-              <p className="font-semibold text-sm uppercase tracking-wider">
+            <div className="absolute -bottom-6 -right-6 bg-secondary text-foreground px-4 py-2 rounded-lg shadow-sm border border-border">
+              <p className="font-medium text-xs uppercase tracking-wider">
                 100% Sur-mesure
               </p>
             </div>
