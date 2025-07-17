@@ -18,7 +18,7 @@ const TestimonialsSection = () => {
   ];
 
   return (
-    <section className="section-padding bg-gray-50">
+    <section className="section-padding bg-background">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Ce qu'en pensent nos clients
