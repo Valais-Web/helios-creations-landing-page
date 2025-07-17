@@ -16,7 +16,7 @@ const Index = () => {
       <div className="relative min-h-screen">
         {/* Background image for both header and hero */}
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.03]" style={{
-          backgroundImage: `url(/lovable-uploads/98178adf-676f-4df9-900b-60c69a214e8a.png)`
+          backgroundImage: `url(/lovable-uploads/7846f98d-2713-4494-9578-18e49b6fb101.png)`
         }} />
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
         
