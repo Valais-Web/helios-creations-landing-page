@@ -1,20 +1,11 @@
 import { Check, Star } from 'lucide-react';
 const Hero = () => {
   const benefits = ["Profitez d'une pergola bioclimatique personnalisée qui correspondra à votre style", "Des produits de qualité supérieure avec le souci intégral du détail", "Installations professionnelles, durables et de qualité partout en Suisse Romande", "Adapté à votre budget et vos besoins"];
-  return <section className="relative min-h-screen flex flex-col">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.03]" style={{
-      backgroundImage: `url(/lovable-uploads/98178adf-676f-4df9-900b-60c69a214e8a.png)`
-    }} />
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
-      
+  return <section className="flex flex-col flex-1">
       {/* Content */}
-      <div className="relative z-10 flex flex-col flex-1">
-        {/* Centered logo at top */}
-        
-
+      <div className="flex flex-col flex-1">
         {/* Main content */}
-        <div className="flex-1 section-padding">
+        <div className="flex-1 section-padding pt-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">

@@ -11,17 +11,31 @@ import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <Hero />
-      <PresentationSection />
-      <PergolasSlider />
-      <FeaturesSection />
-      <VideoSection />
-      <CompanySection />
-      <TestimonialsSection />
-      <ContactForm />
-      <Footer />
+    <div className="min-h-screen">
+      {/* Hero section with header integrated */}
+      <div className="relative min-h-screen">
+        {/* Background image for both header and hero */}
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.03]" style={{
+          backgroundImage: `url(/lovable-uploads/98178adf-676f-4df9-900b-60c69a214e8a.png)`
+        }} />
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
+        
+        {/* Header and Hero content */}
+        <div className="relative z-10">
+          <Header />
+          <Hero />
+        </div>
+      </div>
+      <div className="bg-background">
+        <PresentationSection />
+        <PergolasSlider />
+        <FeaturesSection />
+        <VideoSection />
+        <CompanySection />
+        <TestimonialsSection />
+        <ContactForm />
+        <Footer />
+      </div>
     </div>
   );
 };
