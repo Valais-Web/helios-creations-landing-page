@@ -2,7 +2,7 @@ import { Check, Star } from 'lucide-react';
 import heroImage from '@/assets/hero-pergola.jpg';
 import heliosLogo from '@/assets/helios-logo.png';
 const Hero = () => {
-  const benefits = ["Profitez d'une pergola bioclimatique personnalisée qui correspondra à votre style", "Des produits de qualité supérieure avec le souci intégral du détail", "Installation par nos propres équipes, discrètes et de qualité partout en Suisse romande", "Un suivi et service irréprochable dans la durée"];
+  const benefits = ["Profitez d'une pergola bioclimatique personnalisée qui correspondra à votre style", "Des produits de qualité supérieure avec le souci intégral du détail", "Installations professionnelles, durables et de qualité partout en Suisse Romande", "Adapté à votre budget et vos besoins"];
   return <section className="relative min-h-screen flex flex-col">
       {/* Background image with overlay */}
       <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5" style={{
@@ -47,7 +47,7 @@ const Hero = () => {
                     {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                   </div>
                   <div className="text-sm text-gray-600">
-                    <span className="font-semibold">4.7</span> • Basé sur 19 avis
+                    <span className="font-semibold">4.9</span> • Basé sur 47 avis
                   </div>
                 </div>
               </div>
