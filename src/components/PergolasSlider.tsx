@@ -29,7 +29,7 @@ const PergolasSlider = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Header */}
         <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary mb-4">
             Inspirez-vous
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
