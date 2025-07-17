@@ -1,15 +1,14 @@
 import { Check, Star } from 'lucide-react';
-import heroImage from '@/assets/pergola-family.jpg';
-import backgroundImage from '@/assets/modern-house-bg.jpg';
+import heroImage from '@/assets/hero-pergola.jpg';
 import heliosLogo from '@/assets/helios-logo.png';
 const Hero = () => {
   const benefits = ["Profitez d'une pergola bioclimatique personnalisée qui correspondra à votre style", "Des produits de qualité supérieure avec le souci intégral du détail", "Installations professionnelles, durables et de qualité partout en Suisse Romande", "Adapté à votre budget et vos besoins"];
-  return <section className="relative min-h-screen flex flex-col overflow-hidden">
+  return <section className="relative min-h-screen flex flex-col">
       {/* Background image with overlay */}
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.03]" style={{
-      backgroundImage: `url(${backgroundImage})`
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5" style={{
+      backgroundImage: `url(${heroImage})`
     }} />
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
+      <div className="absolute inset-0 bg-background/95" />
       
       {/* Content */}
       <div className="relative z-10 flex flex-col flex-1">
@@ -53,15 +52,8 @@ const Hero = () => {
                 </div>
               </div>
               
-              <div className="order-1 lg:order-2 relative">
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl">
-                  <img 
-                    src={heroImage} 
-                    alt="Pergola bioclimatique Hélios Créations avec famille" 
-                    className="w-full h-auto transform hover:scale-105 transition-transform duration-700" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                </div>
+              <div className="order-1 lg:order-2">
+                <img src={heroImage} alt="Pergola bioclimatique Hélios Créations" className="w-full h-auto rounded-lg shadow-xl" />
               </div>
             </div>
           </div>
