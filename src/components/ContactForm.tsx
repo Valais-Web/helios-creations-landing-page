@@ -28,9 +28,12 @@ const ContactForm = () => {
 
     try {
       const submissionData = {
-        ...formData,
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
         postal_code: formData.postalCode,
         callback_time: formData.callbackTime,
+        message: formData.message,
         gclid: getGclid()
       };
 
