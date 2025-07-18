@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -13,22 +12,18 @@ const ContactForm = () => {
     message: '',
     callbackTime: ''
   });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Ici vous pourriez ajouter la logique d'envoi du formulaire
   };
-
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
-
-  return (
-    <section className="section-padding bg-gray-50">
+  return <section className="section-padding bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Prêt à profiter de votre extérieur ?
@@ -38,18 +33,10 @@ const ContactForm = () => {
           {/* Image section */}
           <div className="relative order-2 lg:order-1">
             <div className="relative overflow-hidden rounded-lg shadow-lg">
-              <img 
-                src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" 
-                alt="Pergola moderne avec femme se détendant"
-                className="w-full h-full object-cover"
-              />
+              <img src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" alt="Pergola moderne avec femme se détendant" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
-            <div className="absolute -bottom-6 -right-6 bg-secondary text-foreground px-4 py-2 rounded-lg shadow-sm border border-border">
-              <p className="font-medium text-xs uppercase tracking-wider">
-                100% Sur-mesure
-              </p>
-            </div>
+            
           </div>
 
           {/* Form section */}
@@ -60,26 +47,14 @@ const ContactForm = () => {
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Nom / Prénom *
                   </label>
-                  <Input 
-                    type="text" 
-                    required 
-                    value={formData.name} 
-                    onChange={e => handleInputChange('name', e.target.value)} 
-                    className="w-full" 
-                  />
+                  <Input type="text" required value={formData.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full" />
                 </div>
                 
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Email *
                   </label>
-                  <Input 
-                    type="email" 
-                    required 
-                    value={formData.email} 
-                    onChange={e => handleInputChange('email', e.target.value)} 
-                    className="w-full" 
-                  />
+                  <Input type="email" required value={formData.email} onChange={e => handleInputChange('email', e.target.value)} className="w-full" />
                 </div>
               </div>
               
@@ -88,26 +63,14 @@ const ContactForm = () => {
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Téléphone *
                   </label>
-                  <Input 
-                    type="tel" 
-                    required 
-                    value={formData.phone} 
-                    onChange={e => handleInputChange('phone', e.target.value)} 
-                    className="w-full" 
-                  />
+                  <Input type="tel" required value={formData.phone} onChange={e => handleInputChange('phone', e.target.value)} className="w-full" />
                 </div>
                 
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Code Postal *
                   </label>
-                  <Input 
-                    type="text" 
-                    required 
-                    value={formData.postalCode} 
-                    onChange={e => handleInputChange('postalCode', e.target.value)} 
-                    className="w-full" 
-                  />
+                  <Input type="text" required value={formData.postalCode} onChange={e => handleInputChange('postalCode', e.target.value)} className="w-full" />
                 </div>
               </div>
               
@@ -130,13 +93,7 @@ const ContactForm = () => {
               
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">Votre message</label>
-                <Textarea 
-                  rows={5} 
-                  value={formData.message} 
-                  onChange={e => handleInputChange('message', e.target.value)} 
-                  className="w-full" 
-                  placeholder="Décrivez votre projet..." 
-                />
+                <Textarea rows={5} value={formData.message} onChange={e => handleInputChange('message', e.target.value)} className="w-full" placeholder="Décrivez votre projet..." />
               </div>
               
               <div className="text-center">
@@ -148,8 +105,6 @@ const ContactForm = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactForm;
