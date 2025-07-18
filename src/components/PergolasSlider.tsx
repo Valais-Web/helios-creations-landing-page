@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import pergola1 from '/lovable-uploads/ebffc880-3b29-4833-a4e2-7789f51ad359.png';
@@ -17,6 +17,15 @@ const PergolasSlider = () => {
   const prevSlide = () => {
     setCurrentIndex(prev => (prev - 1 + images.length) % images.length);
   };
+
+  // Auto-advance the slider every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getVisibleImages = () => {
     const result = [];
