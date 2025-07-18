@@ -31,7 +31,7 @@ const ContactForm = () => {
         
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Image section */}
-          <div className="relative order-2 lg:order-1">
+          <div className="relative order-1 lg:order-1">
             <div className="relative overflow-hidden rounded-lg shadow-lg">
               <img src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" alt="Pergola moderne avec femme se détendant" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -40,7 +40,7 @@ const ContactForm = () => {
           </div>
 
           {/* Form section */}
-          <div className="order-1 lg:order-2">
+          <div className="order-2 lg:order-2">
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>

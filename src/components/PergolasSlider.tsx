@@ -55,7 +55,19 @@ const PergolasSlider = () => {
 
         {/* Image Gallery */}
         <div className="relative mb-12">
-          <div className="flex justify-center items-center gap-4 md:gap-6">
+          {/* Mobile: Single image */}
+          <div className="md:hidden flex justify-center">
+            <div className="w-full max-w-sm h-48 relative overflow-hidden rounded-2xl shadow-lg">
+              <img 
+                src={images[currentIndex]} 
+                alt={`Pergola réalisation ${currentIndex + 1}`}
+                className="w-full h-full object-cover" 
+              />
+            </div>
+          </div>
+          
+          {/* Desktop: Three images */}
+          <div className="hidden md:flex justify-center items-center gap-4 md:gap-6">
             {getVisibleImages().map((image, i) => (
               <div 
                 key={`${image.index}-${i}`} 
@@ -89,27 +101,54 @@ const PergolasSlider = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="inline-flex items-center gap-6 bg-background/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg border border-border/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold">➞</span>
+        <div className="mx-4 md:mx-0">
+          {/* Mobile: Stacked layout */}
+          <div className="flex flex-col gap-4 md:hidden bg-background/80 backdrop-blur-sm rounded-2xl px-6 py-6 shadow-lg border border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold">➞</span>
+              </div>
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-foreground leading-tight">
+                  Prêt à créer la vôtre ?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Recevez votre devis gratuit et personnalisé
+                </p>
+              </div>
             </div>
-            <div className="text-left">
-              <h3 className="text-lg font-semibold text-foreground leading-tight">
-                Prêt à créer la vôtre ?
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Recevez votre devis gratuit et personnalisé
-              </p>
-            </div>
+            
+            <Button 
+              className="font-semibold w-full"
+              onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Demander un devis gratuit
+            </Button>
           </div>
-          
-          <Button 
-            className="font-semibold px-6 whitespace-nowrap"
-            onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Demander un devis gratuit
-          </Button>
+
+          {/* Desktop: Horizontal layout */}
+          <div className="hidden md:inline-flex items-center gap-6 bg-background/80 backdrop-blur-sm rounded-full px-8 py-4 shadow-lg border border-border/50">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold">➞</span>
+              </div>
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-foreground leading-tight">
+                  Prêt à créer la vôtre ?
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Recevez votre devis gratuit et personnalisé
+                </p>
+              </div>
+            </div>
+            
+            <Button 
+              className="font-semibold px-6 whitespace-nowrap"
+              onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Demander un devis gratuit
+            </Button>
+          </div>
         </div>
       </div>
     </section>
