@@ -22,7 +22,10 @@ const Hero = () => {
                     </li>)}
                 </ul>
 
-                <button className="btn-helios-cta mb-8 hover-scale">
+                <button 
+                  className="btn-helios-cta mb-8 hover-scale"
+                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Demander un devis gratuit
                 </button>
 

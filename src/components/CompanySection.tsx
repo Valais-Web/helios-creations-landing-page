@@ -68,7 +68,10 @@ const CompanySection = () => {
           })}
         </div>
 
-        <button className="btn-helios-cta">
+        <button 
+          className="btn-helios-cta"
+          onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+        >
           DEMANDEZ UN DEVIS GRATUIT
         </button>
       </div>

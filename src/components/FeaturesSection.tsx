@@ -76,7 +76,10 @@ const FeaturesSection = () => {
 
         {/* CTA Button */}
         <div className="text-center mt-12">
-          <button className="btn-helios-cta">
+          <button 
+            className="btn-helios-cta"
+            onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+          >
             DEMANDEZ UN DEVIS GRATUIT
           </button>
         </div>

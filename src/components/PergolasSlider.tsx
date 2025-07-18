@@ -95,7 +95,12 @@ const PergolasSlider = () => {
             </div>
           </div>
           
-          <Button className="font-semibold px-6 whitespace-nowrap">Demander un devis gratuit</Button>
+          <Button 
+            className="font-semibold px-6 whitespace-nowrap"
+            onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Demander un devis gratuit
+          </Button>
         </div>
       </div>
     </section>
