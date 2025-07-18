@@ -3,7 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 const ContactForm = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,10 +16,72 @@ const ContactForm = () => {
     message: '',
     callbackTime: ''
   });
-  const handleSubmit = (e: React.FormEvent) => {
+  // Function to get gclid from URL
+  const getGclid = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('gclid') || localStorage.getItem('gclid') || '';
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Ici vous pourriez ajouter la logique d'envoi du formulaire
+    setIsSubmitting(true);
+
+    try {
+      const submissionData = {
+        ...formData,
+        postal_code: formData.postalCode,
+        callback_time: formData.callbackTime,
+        gclid: getGclid()
+      };
+
+      // Submit to Supabase
+      const { error: supabaseError } = await supabase
+        .from('contact_submissions')
+        .insert([submissionData]);
+
+      if (supabaseError) {
+        throw new Error(`Erreur Supabase: ${supabaseError.message}`);
+      }
+
+      // Submit to Netlify
+      const netlifyFormData = new FormData();
+      Object.entries(submissionData).forEach(([key, value]) => {
+        netlifyFormData.append(key, value || '');
+      });
+      netlifyFormData.append('form-name', 'contact');
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      });
+
+      // Success
+      toast({
+        title: "Merci pour votre message !",
+        description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        postalCode: '',
+        message: '',
+        callbackTime: ''
+      });
+
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -97,8 +163,8 @@ const ContactForm = () => {
               </div>
               
               <div className="text-center">
-                <Button type="submit" className="btn-helios">
-                  Demander un devis gratuit
+                <Button type="submit" className="btn-helios" disabled={isSubmitting}>
+                  {isSubmitting ? 'Envoi en cours...' : 'Demander un devis gratuit'}
                 </Button>
               </div>
             </form>
