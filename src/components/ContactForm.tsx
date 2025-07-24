@@ -59,7 +59,8 @@ const ContactForm = () => {
 
       await fetch('/', {
         method: 'POST',
-        body: netlifyFormData
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
       });
 
       // Success
@@ -117,10 +118,16 @@ const ContactForm = () => {
               name="contact" 
               method="POST" 
               data-netlify="true" 
+              data-netlify-honeypot="bot-field"
               onSubmit={handleSubmit} 
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
             >
               <input type="hidden" name="form-name" value="contact" />
+              <p hidden>
+                <label>
+                  Don't fill this out: <input name="bot-field" />
+                </label>
+              </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
