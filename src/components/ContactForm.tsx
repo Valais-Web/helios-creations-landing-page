@@ -110,13 +110,20 @@ const ContactForm = () => {
 
           {/* Form section */}
           <div className="order-2 lg:order-2">
-            <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
+            <form 
+              name="contact" 
+              method="POST" 
+              data-netlify="true" 
+              onSubmit={handleSubmit} 
+              className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
+            >
+              <input type="hidden" name="form-name" value="contact" />
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Prénom et Nom *
                   </label>
-                  <Input type="text" required value={formData.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full" />
+                  <Input name="name" type="text" required value={formData.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full" />
                 </div>
                 
                 <div>
@@ -124,6 +131,7 @@ const ContactForm = () => {
                     Email *
                   </label>
                   <Input 
+                    name="email"
                     type="email" 
                     required 
                     value={formData.email} 
@@ -140,7 +148,7 @@ const ContactForm = () => {
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Téléphone *
                   </label>
-                  <Input type="tel" required value={formData.phone} onChange={e => handleInputChange('phone', e.target.value)} className="w-full" />
+                  <Input name="phone" type="tel" required value={formData.phone} onChange={e => handleInputChange('phone', e.target.value)} className="w-full" />
                 </div>
                 
                 <div>
@@ -148,6 +156,7 @@ const ContactForm = () => {
                     Code Postal *
                   </label>
                   <Input 
+                    name="postal_code"
                     type="text" 
                     required 
                     value={formData.postalCode} 
@@ -175,11 +184,12 @@ const ContactForm = () => {
                     <SelectItem value="Week-end">Week-end</SelectItem>
                   </SelectContent>
                 </Select>
+                <input type="hidden" name="callback_time" value={formData.callbackTime} />
               </div>
               
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">Votre message</label>
-                <Textarea rows={5} value={formData.message} onChange={e => handleInputChange('message', e.target.value)} className="w-full" placeholder="Décrivez votre projet..." />
+                <Textarea name="message" rows={5} value={formData.message} onChange={e => handleInputChange('message', e.target.value)} className="w-full" placeholder="Décrivez votre projet..." />
               </div>
               
               <div className="text-center">
