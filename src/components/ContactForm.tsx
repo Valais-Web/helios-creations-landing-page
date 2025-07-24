@@ -48,15 +48,18 @@ const ContactForm = () => {
 
       // Submit to Netlify
       const netlifyFormData = new FormData();
-      Object.entries(submissionData).forEach(([key, value]) => {
-        netlifyFormData.append(key, value || '');
-      });
       netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', submissionData.name);
+      netlifyFormData.append('email', submissionData.email);
+      netlifyFormData.append('phone', submissionData.phone);
+      netlifyFormData.append('postal_code', submissionData.postal_code);
+      netlifyFormData.append('callback_time', submissionData.callback_time);
+      netlifyFormData.append('message', submissionData.message);
+      netlifyFormData.append('gclid', submissionData.gclid);
 
       await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString()
+        body: netlifyFormData
       });
 
       // Success
