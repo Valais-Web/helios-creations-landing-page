@@ -114,7 +114,7 @@ const ContactForm = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
-                    Nom / Prénom *
+                    Prénom et Nom *
                   </label>
                   <Input type="text" required value={formData.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full" />
                 </div>
@@ -123,7 +123,15 @@ const ContactForm = () => {
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Email *
                   </label>
-                  <Input type="email" required value={formData.email} onChange={e => handleInputChange('email', e.target.value)} className="w-full" />
+                  <Input 
+                    type="email" 
+                    required 
+                    value={formData.email} 
+                    onChange={e => handleInputChange('email', e.target.value)} 
+                    className="w-full"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    title="Veuillez entrer une adresse email valide (ex: nom@exemple.com)"
+                  />
                 </div>
               </div>
               
@@ -139,7 +147,16 @@ const ContactForm = () => {
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Code Postal *
                   </label>
-                  <Input type="text" required value={formData.postalCode} onChange={e => handleInputChange('postalCode', e.target.value)} className="w-full" />
+                  <Input 
+                    type="text" 
+                    required 
+                    value={formData.postalCode} 
+                    onChange={e => handleInputChange('postalCode', e.target.value)} 
+                    className="w-full"
+                    pattern="[0-9]{4}"
+                    maxLength={4}
+                    title="Veuillez entrer un code postal à 4 chiffres"
+                  />
                 </div>
               </div>
               
@@ -152,10 +169,10 @@ const ContactForm = () => {
                     <SelectValue placeholder="Sélectionnez un créneau" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="morning">Matin (8h-12h)</SelectItem>
-                    <SelectItem value="afternoon">Après-midi (12h-18h)</SelectItem>
-                    <SelectItem value="evening">Soir (18h-20h)</SelectItem>
-                    <SelectItem value="weekend">Week-end</SelectItem>
+                    <SelectItem value="Matin (8h-12h)">Matin (8h-12h)</SelectItem>
+                    <SelectItem value="Après-midi (12h-18h)">Après-midi (12h-18h)</SelectItem>
+                    <SelectItem value="Soir (18h-20h)">Soir (18h-20h)</SelectItem>
+                    <SelectItem value="Week-end">Week-end</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
