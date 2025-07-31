@@ -23,6 +23,7 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default redirect
     setIsSubmitting(true);
 
     try {
@@ -47,11 +48,9 @@ const ContactForm = () => {
 
       // Push form data to dataLayer
       if (typeof window !== 'undefined') {
-        // Initialize dataLayer if it doesn't exist
         if (!(window as any).dataLayer) {
           (window as any).dataLayer = [];
         }
-        
         (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
@@ -65,13 +64,23 @@ const ContactForm = () => {
             gclid: getGclid()
           }
         });
-        console.log('Form data pushed to dataLayer:', (window as any).dataLayer);
+        console.log('Form data pushed to dataLayer');
       }
 
       // Success
       toast({
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
+      });
+
+      // Submit to Netlify manually
+      const formElement = e.target as HTMLFormElement;
+      const netlifyData = new FormData(formElement);
+      
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(netlifyData as any).toString(),
       });
 
       // Reset form
@@ -84,11 +93,8 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
-      // Allow the form to submit naturally to Netlify
-      // Don't prevent default - let Netlify handle the submission
-
     } catch (error) {
-      e.preventDefault(); // Only prevent default if there's an error
+      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
