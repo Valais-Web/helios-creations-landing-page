@@ -23,6 +23,7 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsSubmitting(true);
 
     try {
@@ -44,6 +45,23 @@ const ContactForm = () => {
       if (supabaseError) {
         throw new Error(`Erreur Supabase: ${supabaseError.message}`);
       }
+
+      // Submit to Netlify manually
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', submissionData.name);
+      netlifyFormData.append('email', submissionData.email);
+      netlifyFormData.append('phone', submissionData.phone);
+      netlifyFormData.append('postal_code', submissionData.postal_code);
+      netlifyFormData.append('callback_time', submissionData.callback_time);
+      netlifyFormData.append('message', submissionData.message);
+      netlifyFormData.append('gclid', submissionData.gclid);
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      });
 
       // Push form data to dataLayer
       if (typeof window !== 'undefined' && (window as any).dataLayer) {
@@ -79,11 +97,7 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
-      // Allow native form submission to Netlify (don't preventDefault)
-      // This will happen after our processing is complete
-
     } catch (error) {
-      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
