@@ -64,7 +64,12 @@ const ContactForm = () => {
       });
 
       // Push form data to dataLayer
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      if (typeof window !== 'undefined') {
+        // Initialize dataLayer if it doesn't exist
+        if (!(window as any).dataLayer) {
+          (window as any).dataLayer = [];
+        }
+        
         (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
@@ -78,7 +83,7 @@ const ContactForm = () => {
             gclid: getGclid()
           }
         });
-        console.log('Form data pushed to dataLayer');
+        console.log('Form data pushed to dataLayer:', (window as any).dataLayer);
       }
 
       // Success
