@@ -46,12 +46,7 @@ const ContactForm = () => {
       }
 
       // Push form data to dataLayer
-      if (typeof window !== 'undefined') {
-        // Initialize dataLayer if it doesn't exist
-        if (!(window as any).dataLayer) {
-          (window as any).dataLayer = [];
-        }
-        
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
         (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
@@ -65,7 +60,7 @@ const ContactForm = () => {
             gclid: getGclid()
           }
         });
-        console.log('Form data pushed to dataLayer:', (window as any).dataLayer);
+        console.log('Form data pushed to dataLayer');
       }
 
       // Success
@@ -84,11 +79,11 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
-      // Allow the form to submit naturally to Netlify
-      // Don't prevent default - let Netlify handle the submission
+      // Allow native form submission to Netlify (don't preventDefault)
+      // This will happen after our processing is complete
 
     } catch (error) {
-      e.preventDefault(); // Only prevent default if there's an error
+      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
