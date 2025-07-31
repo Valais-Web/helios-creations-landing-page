@@ -74,13 +74,20 @@ const ContactForm = () => {
       });
 
       // Submit to Netlify manually
-      const formElement = e.target as HTMLFormElement;
-      const netlifyData = new FormData(formElement);
-      
-      await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(netlifyData as any).toString(),
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', formData.name);
+      netlifyFormData.append('email', formData.email);
+      netlifyFormData.append('phone', formData.phone);
+      netlifyFormData.append('postal_code', formData.postalCode);
+      netlifyFormData.append('callback_time', formData.callbackTime);
+      netlifyFormData.append('message', formData.message);
+      netlifyFormData.append('gclid', getGclid());
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
       });
 
       // Reset form
