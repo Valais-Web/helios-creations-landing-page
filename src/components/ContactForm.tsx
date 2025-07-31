@@ -23,6 +23,7 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default redirect
     setIsSubmitting(true);
 
     try {
@@ -72,6 +73,16 @@ const ContactForm = () => {
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
       });
 
+      // Submit to Netlify manually
+      const formElement = e.target as HTMLFormElement;
+      const netlifyData = new FormData(formElement);
+      
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(netlifyData as any).toString(),
+      });
+
       // Reset form
       setFormData({
         name: '',
@@ -81,9 +92,6 @@ const ContactForm = () => {
         message: '',
         callbackTime: ''
       });
-
-      // Allow native form submission to Netlify (don't preventDefault)
-      // This will happen after our processing is complete
 
     } catch (error) {
       e.preventDefault(); // Only prevent default on error
