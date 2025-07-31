@@ -23,6 +23,7 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
     setIsSubmitting(true);
 
     try {
@@ -66,6 +67,23 @@ const ContactForm = () => {
         console.log('Form data pushed to dataLayer');
       }
 
+      // Submit to Netlify manually
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', formData.name);
+      netlifyFormData.append('email', formData.email);
+      netlifyFormData.append('phone', formData.phone);
+      netlifyFormData.append('postal_code', formData.postalCode);
+      netlifyFormData.append('callback_time', formData.callbackTime);
+      netlifyFormData.append('message', formData.message);
+      netlifyFormData.append('gclid', getGclid());
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      });
+
       // Success
       toast({
         title: "Merci pour votre message !",
@@ -82,11 +100,7 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
-      // Allow native form submission to Netlify (don't preventDefault)
-      // This will happen after our processing is complete
-
     } catch (error) {
-      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
