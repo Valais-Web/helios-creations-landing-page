@@ -46,21 +46,20 @@ const ContactForm = () => {
         throw new Error(`Erreur Supabase: ${supabaseError.message}`);
       }
 
-      // Submit to Netlify manually
-      const netlifyFormData = new FormData();
-      netlifyFormData.append('form-name', 'contact');
-      netlifyFormData.append('name', submissionData.name);
-      netlifyFormData.append('email', submissionData.email);
-      netlifyFormData.append('phone', submissionData.phone);
-      netlifyFormData.append('postal_code', submissionData.postal_code);
-      netlifyFormData.append('callback_time', submissionData.callback_time);
-      netlifyFormData.append('message', submissionData.message);
-      netlifyFormData.append('gclid', submissionData.gclid);
+      // Submit to Netlify using FormData directly
+      const formBody = new FormData();
+      formBody.append('form-name', 'contact');
+      formBody.append('name', submissionData.name);
+      formBody.append('email', submissionData.email);
+      formBody.append('phone', submissionData.phone);
+      formBody.append('postal_code', submissionData.postal_code);
+      formBody.append('callback_time', submissionData.callback_time);
+      formBody.append('message', submissionData.message);
+      formBody.append('gclid', submissionData.gclid);
 
       await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString()
+        body: formBody
       });
 
       // Push form data to dataLayer
