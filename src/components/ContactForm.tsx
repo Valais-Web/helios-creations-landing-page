@@ -46,7 +46,10 @@ const ContactForm = () => {
       }
 
       // Push form data to dataLayer
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+      if (typeof window !== 'undefined') {
+        if (!(window as any).dataLayer) {
+          (window as any).dataLayer = [];
+        }
         (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
