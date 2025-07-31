@@ -47,7 +47,7 @@ const ContactForm = () => {
       }
 
       // Submit to Netlify manually
-      const netlifyFormData = new URLSearchParams();
+      const netlifyFormData = new FormData();
       netlifyFormData.append('form-name', 'contact');
       netlifyFormData.append('name', submissionData.name);
       netlifyFormData.append('email', submissionData.email);
@@ -57,15 +57,11 @@ const ContactForm = () => {
       netlifyFormData.append('message', submissionData.message);
       netlifyFormData.append('gclid', submissionData.gclid);
 
-      const netlifyResponse = await fetch('/', {
+      await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: netlifyFormData.toString()
+        body: new URLSearchParams(netlifyFormData as any).toString()
       });
-
-      if (!netlifyResponse.ok) {
-        console.warn('Netlify submission failed:', netlifyResponse.status);
-      }
 
       // Push form data to dataLayer
       if (typeof window !== 'undefined') {
