@@ -23,7 +23,6 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     setIsSubmitting(true);
 
     try {
@@ -45,22 +44,6 @@ const ContactForm = () => {
       if (supabaseError) {
         throw new Error(`Erreur Supabase: ${supabaseError.message}`);
       }
-
-      // Submit to Netlify using FormData directly
-      const formBody = new FormData();
-      formBody.append('form-name', 'contact');
-      formBody.append('name', submissionData.name);
-      formBody.append('email', submissionData.email);
-      formBody.append('phone', submissionData.phone);
-      formBody.append('postal_code', submissionData.postal_code);
-      formBody.append('callback_time', submissionData.callback_time);
-      formBody.append('message', submissionData.message);
-      formBody.append('gclid', submissionData.gclid);
-
-      await fetch('/', {
-        method: 'POST',
-        body: formBody
-      });
 
       // Push form data to dataLayer
       if (typeof window !== 'undefined') {
@@ -101,7 +84,11 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
+      // Allow the form to submit naturally to Netlify
+      // Don't prevent default - let Netlify handle the submission
+
     } catch (error) {
+      e.preventDefault(); // Only prevent default if there's an error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
