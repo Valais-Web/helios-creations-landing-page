@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+// Declare dataLayer for TypeScript
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
 const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,16 +18,12 @@ const ContactForm = () => {
     phone: '',
     postalCode: '',
     message: '',
-    callbackTime: ''
+    callbackTime: '',
+    gclid: new URLSearchParams(window.location.search).get('gclid') || ''
   });
-  // Function to get gclid from URL
-  const getGclid = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('gclid') || localStorage.getItem('gclid') || '';
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default redirect
+    e.preventDefault();
     setIsSubmitting(true);
 
     try {
@@ -34,7 +34,7 @@ const ContactForm = () => {
         postal_code: formData.postalCode,
         callback_time: formData.callbackTime,
         message: formData.message,
-        gclid: getGclid()
+        gclid: formData.gclid
       };
 
       // Submit to Supabase
@@ -46,12 +46,26 @@ const ContactForm = () => {
         throw new Error(`Erreur Supabase: ${supabaseError.message}`);
       }
 
+      // Now submit to Netlify manually using the working pattern
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', formData.name);
+      netlifyFormData.append('email', formData.email);
+      netlifyFormData.append('phone', formData.phone);
+      netlifyFormData.append('postal_code', formData.postalCode);
+      netlifyFormData.append('callback_time', formData.callbackTime);
+      netlifyFormData.append('message', formData.message);
+      netlifyFormData.append('gclid', formData.gclid);
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      });
+
       // Push form data to dataLayer
-      if (typeof window !== 'undefined') {
-        if (!(window as any).dataLayer) {
-          (window as any).dataLayer = [];
-        }
-        (window as any).dataLayer.push({
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
           form_data: {
@@ -61,26 +75,16 @@ const ContactForm = () => {
             postal_code: formData.postalCode,
             callback_time: formData.callbackTime,
             message: formData.message,
-            gclid: getGclid()
+            gclid: formData.gclid
           }
         });
         console.log('Form data pushed to dataLayer');
       }
 
-      // Success
+      // Success toast
       toast({
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
-      });
-
-      // Submit to Netlify manually
-      const formElement = e.target as HTMLFormElement;
-      const netlifyData = new FormData(formElement);
-      
-      await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(netlifyData as any).toString(),
       });
 
       // Reset form
@@ -90,11 +94,11 @@ const ContactForm = () => {
         phone: '',
         postalCode: '',
         message: '',
-        callbackTime: ''
+        callbackTime: '',
+        gclid: formData.gclid // Keep gclid for potential future submissions
       });
 
     } catch (error) {
-      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
