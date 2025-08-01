@@ -88,6 +88,7 @@ const ContactForm = () => {
       });
 
       // Now allow native form submission to Netlify
+
       // We need to submit the form natively after our processing
       const form = e.currentTarget as HTMLFormElement;
       
