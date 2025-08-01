@@ -152,6 +152,14 @@ const ContactForm = () => {
                 </label>
               </p>
               <input type="hidden" name="gclid" value={getGclid()} />
+              
+              {/* Static fields for Netlify form detection - these help Netlify detect the form structure */}
+              <input type="hidden" name="name" />
+              <input type="hidden" name="email" />
+              <input type="hidden" name="phone" />
+              <input type="hidden" name="postal_code" />
+              <input type="hidden" name="callback_time" />
+              <input type="hidden" name="message" />
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
