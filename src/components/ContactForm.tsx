@@ -1,41 +1,31 @@
 import { useState } from 'react';
-import { CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-// Declare dataLayer for TypeScript
-declare global {
-  interface Window {
-    dataLayer: any[];
-  }
-}
-
 const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     postalCode: '',
     message: '',
-    callbackTime: '',
-    gclid: new URLSearchParams(window.location.search).get('gclid') || ''
+    callbackTime: ''
   });
-
-  // Function to get gclid from URL or localStorage
+  // Function to get gclid from URL
   const getGclid = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('gclid') || localStorage.getItem('gclid') || '';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Store contact submission in Supabase first
       const submissionData = {
         name: formData.name,
         email: formData.email,
@@ -46,24 +36,18 @@ const ContactForm = () => {
         gclid: getGclid()
       };
 
+      // Submit to Supabase
       const { error: supabaseError } = await supabase
         .from('contact_submissions')
         .insert([submissionData]);
 
       if (supabaseError) {
-        console.error('Supabase error:', supabaseError);
         throw new Error(`Erreur Supabase: ${supabaseError.message}`);
       }
 
-      console.log('Contact submission stored successfully');
-
-      // Initialize dataLayer if it doesn't exist and push form data
-      if (typeof window !== 'undefined') {
-        if (!window.dataLayer) {
-          window.dataLayer = [];
-        }
-        
-        window.dataLayer.push({
+      // Push form data to dataLayer
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
           form_data: {
@@ -76,33 +60,30 @@ const ContactForm = () => {
             gclid: getGclid()
           }
         });
-        console.log('Form data pushed to dataLayer:', window.dataLayer);
+        console.log('Form data pushed to dataLayer');
       }
 
-      // Now submit to Netlify natively by programmatically submitting the form
-      const form = e.target as HTMLFormElement;
-      const netlifyFormData = new FormData(form);
-      
-      // Submit to Netlify without preventing default
-      fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString()
-      }).then(() => {
-        console.log('Form submitted to Netlify successfully');
-      }).catch((error) => {
-        console.error('Netlify submission error:', error);
-      });
-
-      // Show success state
-      setIsSubmitted(true);
-
+      // Success
       toast({
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
       });
 
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        postalCode: '',
+        message: '',
+        callbackTime: ''
+      });
+
+      // Allow native form submission to Netlify (don't preventDefault)
+      // This will happen after our processing is complete
+
     } catch (error) {
+      e.preventDefault(); // Only prevent default on error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
@@ -113,37 +94,13 @@ const ContactForm = () => {
       setIsSubmitting(false);
     }
   };
-
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
-
-  // Success state
-  if (isSubmitted) {
-    return (
-      <section id="contact-form" className="section-padding bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
-              <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary mb-4">
-                Merci pour votre message !
-              </h2>
-              <p className="text-lg text-foreground leading-relaxed">
-                Nous vous recontacterons dans les plus brefs délais pour établir un devis et répondre à vos questions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section id="contact-form" className="section-padding bg-gray-50">
+  return <section id="contact-form" className="section-padding bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Prêt à profiter de votre extérieur ?
@@ -153,13 +110,10 @@ const ContactForm = () => {
           {/* Image section */}
           <div className="relative order-1 lg:order-1">
             <div className="relative overflow-hidden rounded-lg shadow-lg">
-              <img 
-                src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" 
-                alt="Pergola moderne avec femme se détendant" 
-                className="w-full h-full object-cover" 
-              />
+              <img src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" alt="Pergola moderne avec femme se détendant" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
+            
           </div>
 
           {/* Form section */}
@@ -172,15 +126,22 @@ const ContactForm = () => {
               onSubmit={handleSubmit} 
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
             >
-              {/* Hidden fields for Netlify detection */}
               <input type="hidden" name="form-name" value="contact" />
+              
+              {/* Static fields for Netlify detection */}
+              <input type="hidden" name="name" />
+              <input type="hidden" name="email" />
+              <input type="hidden" name="phone" />
+              <input type="hidden" name="postal_code" />
+              <input type="hidden" name="callback_time" />
+              <input type="hidden" name="message" />
+              <input type="hidden" name="gclid" />
+              
               <p hidden>
                 <label>
                   Don't fill this out: <input name="bot-field" />
                 </label>
               </p>
-              <input type="hidden" name="gclid" value={getGclid()} />
-              
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
@@ -278,20 +239,14 @@ const ContactForm = () => {
               </div>
               
               <div className="text-center">
-                <button 
-                  type="submit" 
-                  className="btn-helios" 
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" className="btn-helios" disabled={isSubmitting}>
                   {isSubmitting ? 'Envoi en cours...' : 'Demander un devis gratuit'}
-                </button>
+                </Button>
               </div>
             </form>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default ContactForm;
