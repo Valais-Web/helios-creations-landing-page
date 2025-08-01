@@ -57,6 +57,29 @@ const ContactForm = () => {
 
       console.log('Contact submission stored successfully');
 
+      // Now submit to Netlify with correct field names
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'contact');
+      netlifyFormData.append('name', formData.name);
+      netlifyFormData.append('email', formData.email);
+      netlifyFormData.append('phone', formData.phone);
+      netlifyFormData.append('postal_code', formData.postalCode);
+      netlifyFormData.append('callback_time', formData.callbackTime);
+      netlifyFormData.append('message', formData.message);
+      netlifyFormData.append('gclid', getGclid());
+
+      const netlifyResponse = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      });
+
+      if (netlifyResponse.ok) {
+        console.log('Form submitted to Netlify successfully');
+      } else {
+        console.error('Netlify submission failed:', netlifyResponse.status);
+      }
+
       // Initialize dataLayer if it doesn't exist and push form data
       if (typeof window !== 'undefined') {
         if (!window.dataLayer) {
@@ -86,18 +109,6 @@ const ContactForm = () => {
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
       });
-
-      // Now allow native form submission to Netlify
-      const form = e.currentTarget as HTMLFormElement;
-      const netlifyFormData = new FormData(form);
-      
-      // Submit to Netlify naturally
-      await fetch('/', {
-        method: 'POST',
-        body: netlifyFormData
-      });
-
-      console.log('Form submitted to Netlify successfully');
 
     } catch (error) {
       console.error('Erreur lors de l\'envoi:', error);
