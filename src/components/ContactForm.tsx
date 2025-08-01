@@ -57,7 +57,7 @@ const ContactForm = () => {
 
       console.log('Contact submission stored successfully');
 
-      // Now submit to Netlify
+      // Now submit to Netlify with correct field names
       const netlifyFormData = new FormData();
       netlifyFormData.append('form-name', 'contact');
       netlifyFormData.append('name', formData.name);
@@ -68,13 +68,17 @@ const ContactForm = () => {
       netlifyFormData.append('message', formData.message);
       netlifyFormData.append('gclid', getGclid());
 
-      await fetch('/', {
+      const netlifyResponse = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(netlifyFormData as any).toString()
       });
 
-      console.log('Form submitted to Netlify successfully');
+      if (netlifyResponse.ok) {
+        console.log('Form submitted to Netlify successfully');
+      } else {
+        console.error('Netlify submission failed:', netlifyResponse.status);
+      }
 
       // Initialize dataLayer if it doesn't exist and push form data
       if (typeof window !== 'undefined') {
