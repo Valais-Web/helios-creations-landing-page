@@ -23,7 +23,6 @@ const ContactForm = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default redirect
     setIsSubmitting(true);
 
     try {
@@ -48,9 +47,11 @@ const ContactForm = () => {
 
       // Push form data to dataLayer
       if (typeof window !== 'undefined') {
+        // Initialize dataLayer if it doesn't exist
         if (!(window as any).dataLayer) {
           (window as any).dataLayer = [];
         }
+        
         (window as any).dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
@@ -64,30 +65,13 @@ const ContactForm = () => {
             gclid: getGclid()
           }
         });
-        console.log('Form data pushed to dataLayer');
+        console.log('Form data pushed to dataLayer:', (window as any).dataLayer);
       }
 
       // Success
       toast({
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
-      });
-
-      // Submit to Netlify manually
-      const netlifyFormData = new FormData();
-      netlifyFormData.append('form-name', 'contact');
-      netlifyFormData.append('name', formData.name);
-      netlifyFormData.append('email', formData.email);
-      netlifyFormData.append('phone', formData.phone);
-      netlifyFormData.append('postal_code', formData.postalCode);
-      netlifyFormData.append('callback_time', formData.callbackTime);
-      netlifyFormData.append('message', formData.message);
-      netlifyFormData.append('gclid', getGclid());
-
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString()
       });
 
       // Reset form
@@ -100,8 +84,11 @@ const ContactForm = () => {
         callbackTime: ''
       });
 
+      // Allow the form to submit naturally to Netlify
+      // Don't prevent default - let Netlify handle the submission
+
     } catch (error) {
-      e.preventDefault(); // Only prevent default on error
+      e.preventDefault(); // Only prevent default if there's an error
       console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
@@ -144,22 +131,22 @@ const ContactForm = () => {
               onSubmit={handleSubmit} 
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
             >
-              {/* Hidden fields for Netlify */}
               <input type="hidden" name="form-name" value="contact" />
-              <p hidden>
-                <label>
-                  Don't fill this out: <input name="bot-field" />
-                </label>
-              </p>
-              <input type="hidden" name="gclid" value={getGclid()} />
               
-              {/* Static fields for Netlify form detection - these help Netlify detect the form structure */}
+              {/* Static fields for Netlify detection */}
               <input type="hidden" name="name" />
               <input type="hidden" name="email" />
               <input type="hidden" name="phone" />
               <input type="hidden" name="postal_code" />
               <input type="hidden" name="callback_time" />
               <input type="hidden" name="message" />
+              <input type="hidden" name="gclid" />
+              
+              <p hidden>
+                <label>
+                  Don't fill this out: <input name="bot-field" />
+                </label>
+              </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
