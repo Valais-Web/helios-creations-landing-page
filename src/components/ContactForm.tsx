@@ -1,90 +1,96 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+declare global {
+  interface Window {
+    dataLayer: any[];
+  }
+}
+
 const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    postalCode: '',
+    postal_code: '',
     message: '',
-    callbackTime: ''
+    callback_time: '',
+    gclid: typeof window !== "undefined"
+      ? (new URLSearchParams(window.location.search).get('gclid') || localStorage.getItem('gclid') || '')
+      : ''
   });
-  // Function to get gclid from URL
-  const getGclid = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('gclid') || localStorage.getItem('gclid') || '';
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Helper to encode form data for Netlify (key=value&key=value...)
+  function encode(data: Record<string, string>) {
+    return Object.keys(data)
+      .map(
+        key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key] ?? "")
+      )
+      .join("&");
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent redirect
+
     setIsSubmitting(true);
 
     try {
-      const submissionData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        postal_code: formData.postalCode,
-        callback_time: formData.callbackTime,
-        message: formData.message,
-        gclid: getGclid()
-      };
-
-      // Submit to Supabase
+      // 1. Save to Supabase
       const { error: supabaseError } = await supabase
         .from('contact_submissions')
-        .insert([submissionData]);
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          postal_code: formData.postal_code,
+          callback_time: formData.callback_time,
+          message: formData.message,
+          gclid: formData.gclid
+        }]);
 
-      if (supabaseError) {
-        throw new Error(`Erreur Supabase: ${supabaseError.message}`);
-      }
+      if (supabaseError) throw new Error(supabaseError.message);
 
-      // Push form data to dataLayer
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
-        (window as any).dataLayer.push({
+      // 2. Submit to Netlify manually
+      const netlifyFormData = {
+        "form-name": "contact",
+        ...formData
+      };
+
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode(netlifyFormData)
+      });
+
+      // 3. Push to dataLayer (create if doesn't exist)
+      if (typeof window !== 'undefined') {
+        if (!window.dataLayer) window.dataLayer = [];
+        window.dataLayer.push({
           event: 'form_submit',
           form_name: 'contact',
-          form_data: {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            postal_code: formData.postalCode,
-            callback_time: formData.callbackTime,
-            message: formData.message,
-            gclid: getGclid()
-          }
+          form_data: { ...formData }
         });
-        console.log('Form data pushed to dataLayer');
       }
 
-      // Success
+      setIsSubmitted(true);
       toast({
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
       });
 
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        postalCode: '',
-        message: '',
-        callbackTime: ''
-      });
-
-      // Allow native form submission to Netlify (don't preventDefault)
-      // This will happen after our processing is complete
-
     } catch (error) {
-      e.preventDefault(); // Only prevent default on error
-      console.error('Erreur lors de l\'envoi:', error);
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de l'envoi du formulaire. Veuillez réessayer.",
@@ -94,111 +100,124 @@ const ContactForm = () => {
       setIsSubmitting(false);
     }
   };
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-  return <section id="contact-form" className="section-padding bg-gray-50">
+
+  // Confirmation state
+  if (isSubmitted) {
+    return (
+      <section id="contact-form" className="section-padding bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+              <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
+              <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary mb-4">
+                Merci pour votre message !
+              </h2>
+              <p className="text-lg text-foreground leading-relaxed">
+                Nous vous recontacterons dans les plus brefs délais pour établir un devis et répondre à vos questions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section id="contact-form" className="section-padding bg-gray-50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
           Prêt à profiter de votre extérieur ?
         </h2>
-        
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Image section */}
           <div className="relative order-1 lg:order-1">
             <div className="relative overflow-hidden rounded-lg shadow-lg">
-              <img src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png" alt="Pergola moderne avec femme se détendant" className="w-full h-full object-cover" />
+              <img
+                src="/lovable-uploads/d8e6f146-04d1-41ba-8294-99b7cffeea8e.png"
+                alt="Pergola moderne avec femme se détendant"
+                className="w-full h-full object-cover"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
-            
           </div>
 
           {/* Form section */}
           <div className="order-2 lg:order-2">
-            <form 
-              name="contact" 
-              method="POST" 
-              data-netlify="true" 
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
               data-netlify-honeypot="bot-field"
-              onSubmit={handleSubmit} 
+              onSubmit={handleSubmit}
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
+              autoComplete="off"
             >
+              {/* Hidden field for Netlify */}
               <input type="hidden" name="form-name" value="contact" />
-              
-              {/* Static fields for Netlify detection */}
-              <input type="hidden" name="name" />
-              <input type="hidden" name="email" />
-              <input type="hidden" name="phone" />
-              <input type="hidden" name="postal_code" />
-              <input type="hidden" name="callback_time" />
-              <input type="hidden" name="message" />
-              <input type="hidden" name="gclid" />
-              
+              {/* Hidden gclid */}
+              <input type="hidden" name="gclid" value={formData.gclid} />
               <p hidden>
                 <label>
                   Don't fill this out: <input name="bot-field" />
                 </label>
               </p>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Prénom et Nom *
                   </label>
-                  <input 
-                    name="name" 
-                    type="text" 
-                    required 
-                    value={formData.name} 
-                    onChange={e => handleInputChange('name', e.target.value)} 
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={e => handleInputChange('name', e.target.value)}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Email *
                   </label>
-                  <input 
+                  <input
                     name="email"
-                    type="email" 
-                    required 
-                    value={formData.email} 
-                    onChange={e => handleInputChange('email', e.target.value)} 
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={e => handleInputChange('email', e.target.value)}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                     title="Veuillez entrer une adresse email valide (ex: nom@exemple.com)"
                   />
                 </div>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Téléphone *
                   </label>
-                  <input 
-                    name="phone" 
-                    type="tel" 
-                    required 
-                    value={formData.phone} 
-                    onChange={e => handleInputChange('phone', e.target.value)} 
+                  <input
+                    name="phone"
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={e => handleInputChange('phone', e.target.value)}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
                   />
                 </div>
-                
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Code Postal *
                   </label>
-                  <input 
+                  <input
                     name="postal_code"
-                    type="text" 
-                    required 
-                    value={formData.postalCode} 
-                    onChange={e => handleInputChange('postalCode', e.target.value)} 
+                    type="text"
+                    required
+                    value={formData.postal_code}
+                    onChange={e => handleInputChange('postal_code', e.target.value)}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
                     pattern="[0-9]{4}"
                     maxLength={4}
@@ -206,16 +225,16 @@ const ContactForm = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">
                   Quand pouvons-nous vous rappeler ? *
                 </label>
-                <select 
+                <select
                   name="callback_time"
                   required
-                  value={formData.callbackTime}
-                  onChange={e => handleInputChange('callbackTime', e.target.value)}
+                  value={formData.callback_time}
+                  onChange={e => handleInputChange('callback_time', e.target.value)}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none bg-white"
                 >
                   <option value="">Sélectionnez un créneau</option>
@@ -225,28 +244,34 @@ const ContactForm = () => {
                   <option value="Week-end">Week-end</option>
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">Votre message</label>
-                <textarea 
-                  name="message" 
-                  rows={5} 
-                  value={formData.message} 
-                  onChange={e => handleInputChange('message', e.target.value)} 
+                <textarea
+                  name="message"
+                  rows={5}
+                  value={formData.message}
+                  onChange={e => handleInputChange('message', e.target.value)}
                   className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none resize-vertical"
-                  placeholder="Décrivez votre projet..." 
+                  placeholder="Décrivez votre projet..."
                 />
               </div>
-              
+
               <div className="text-center">
-                <Button type="submit" className="btn-helios" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  className="btn-helios"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? 'Envoi en cours...' : 'Demander un devis gratuit'}
-                </Button>
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default ContactForm;
