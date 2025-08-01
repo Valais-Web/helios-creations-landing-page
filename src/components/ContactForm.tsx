@@ -79,6 +79,21 @@ const ContactForm = () => {
         console.log('Form data pushed to dataLayer:', window.dataLayer);
       }
 
+      // Now submit to Netlify natively by programmatically submitting the form
+      const form = e.target as HTMLFormElement;
+      const netlifyFormData = new FormData(form);
+      
+      // Submit to Netlify without preventing default
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
+      }).then(() => {
+        console.log('Form submitted to Netlify successfully');
+      }).catch((error) => {
+        console.error('Netlify submission error:', error);
+      });
+
       // Show success state
       setIsSubmitted(true);
 
@@ -86,24 +101,6 @@ const ContactForm = () => {
         title: "Merci pour votre message !",
         description: "Nous vous recontacterons dans les plus brefs délais pour établir un devis.",
       });
-
-      // Now allow native form submission to Netlify
-
-      // We need to submit the form natively after our processing
-      const form = e.currentTarget as HTMLFormElement;
-      
-      // Create a temporary form submission without preventing default
-      setTimeout(() => {
-        const tempForm = form.cloneNode(true) as HTMLFormElement;
-        tempForm.style.display = 'none';
-        document.body.appendChild(tempForm);
-        
-        // Submit the cloned form natively to Netlify
-        tempForm.submit();
-        
-        // Clean up
-        document.body.removeChild(tempForm);
-      }, 100);
 
     } catch (error) {
       console.error('Erreur lors de l\'envoi:', error);
