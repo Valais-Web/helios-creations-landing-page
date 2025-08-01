@@ -144,22 +144,14 @@ const ContactForm = () => {
               onSubmit={handleSubmit} 
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
             >
+              {/* Hidden fields for Netlify */}
               <input type="hidden" name="form-name" value="contact" />
-              
-              {/* Static fields for Netlify detection */}
-              <input type="hidden" name="name" />
-              <input type="hidden" name="email" />
-              <input type="hidden" name="phone" />
-              <input type="hidden" name="postal_code" />
-              <input type="hidden" name="callback_time" />
-              <input type="hidden" name="message" />
-              <input type="hidden" name="gclid" />
-              
               <p hidden>
                 <label>
                   Don't fill this out: <input name="bot-field" />
                 </label>
               </p>
+              <input type="hidden" name="gclid" value={getGclid()} />
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
