@@ -6,7 +6,7 @@
     <title>Pergolas bioclimatiques | Hélios Créations SA</title>
     <meta name="description" content="Profitez de votre jardin toute l'année avec une pergola bioclimatique haut de gamme, installation sur mesure en Suisse romande. Devis gratuit !" />
     <link rel="icon" href="/lovable-uploads/1f07a764-feb8-4cd2-a66a-3c4e616ced26.png" type="image/png">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +26,7 @@
   <body>
     <!-- Hidden Netlify form template for detection -->
     <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
       <input type="text" name="name" />
       <input type="email" name="email" />
       <input type="tel" name="phone" />
@@ -33,11 +34,7 @@
       <input type="text" name="callback_time" />
       <textarea name="message"></textarea>
       <input type="text" name="gclid" />
-      <p hidden>
-        <label>
-          Don't fill this out: <input name="bot-field" />
-        </label>
-      </p>
+      <input name="bot-field" />
     </form>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

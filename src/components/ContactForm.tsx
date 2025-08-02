@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-// DataLayer typing for TS
+// DataLayer for analytics
 declare global {
   interface Window {
     dataLayer: any[];
@@ -15,14 +15,14 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Use snake_case for Netlify, so no mapping errors!
+  // All field names must match index.html
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     postal_code: '',
-    message: '',
     callback_time: '',
+    message: '',
     gclid: typeof window !== "undefined"
       ? (new URLSearchParams(window.location.search).get('gclid') || localStorage.getItem('gclid') || '')
       : ''
@@ -35,7 +35,6 @@ const ContactForm = () => {
     }));
   };
 
-  // Helper to encode for Netlify POST
   function encode(data: Record<string, string>) {
     return Object.keys(data)
       .map(
@@ -49,16 +48,14 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Save to Supabase (adjust to your schema as needed)
+      // 1. Store in Supabase (optional)
       const { error: supabaseError } = await supabase
         .from('contact_submissions')
-        .insert([{
-          ...formData
-        }]);
+        .insert([{ ...formData }]);
 
       if (supabaseError) throw new Error(supabaseError.message);
 
-      // 2. Submit to Netlify with matching field names
+      // 2. Submit to Netlify (must include "form-name" field)
       const netlifyFormData = {
         "form-name": "contact",
         ...formData
@@ -70,7 +67,7 @@ const ContactForm = () => {
         body: encode(netlifyFormData)
       });
 
-      // 3. Push to dataLayer (init if needed)
+      // 3. DataLayer push (for GTM etc)
       if (typeof window !== 'undefined') {
         if (!window.dataLayer) window.dataLayer = [];
         window.dataLayer.push({
@@ -97,7 +94,6 @@ const ContactForm = () => {
     }
   };
 
-  // Success state
   if (isSubmitted) {
     return (
       <section id="contact-form" className="section-padding bg-gray-50">
@@ -136,7 +132,6 @@ const ContactForm = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             </div>
           </div>
-
           {/* Form section */}
           <div className="order-2 lg:order-2">
             <form
@@ -148,7 +143,6 @@ const ContactForm = () => {
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
               autoComplete="off"
             >
-              {/* Hidden field for Netlify detection */}
               <input type="hidden" name="form-name" value="contact" />
               <input type="hidden" name="gclid" value={formData.gclid} />
               <p hidden>
@@ -187,7 +181,6 @@ const ContactForm = () => {
                   />
                 </div>
               </div>
-
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
@@ -219,7 +212,6 @@ const ContactForm = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">
                   Quand pouvons-nous vous rappeler ? *
@@ -238,7 +230,6 @@ const ContactForm = () => {
                   <option value="Week-end">Week-end</option>
                 </select>
               </div>
-
               <div>
                 <label className="block text-foreground font-rubik font-medium mb-2">Votre message</label>
                 <textarea
@@ -250,7 +241,6 @@ const ContactForm = () => {
                   placeholder="Décrivez votre projet..."
                 />
               </div>
-
               <div className="text-center">
                 <button
                   type="submit"
