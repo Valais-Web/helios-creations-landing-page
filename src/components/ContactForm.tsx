@@ -3,6 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+// DataLayer typing for TS
 declare global {
   interface Window {
     dataLayer: any[];
@@ -13,6 +14,8 @@ const ContactForm = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Use snake_case for Netlify, so no mapping errors!
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,7 +35,7 @@ const ContactForm = () => {
     }));
   };
 
-  // Helper to encode form data for Netlify (key=value&key=value...)
+  // Helper to encode for Netlify POST
   function encode(data: Record<string, string>) {
     return Object.keys(data)
       .map(
@@ -42,27 +45,20 @@ const ContactForm = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent redirect
-
+    e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // 1. Save to Supabase
+      // 1. Save to Supabase (adjust to your schema as needed)
       const { error: supabaseError } = await supabase
         .from('contact_submissions')
         .insert([{
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          postal_code: formData.postal_code,
-          callback_time: formData.callback_time,
-          message: formData.message,
-          gclid: formData.gclid
+          ...formData
         }]);
 
       if (supabaseError) throw new Error(supabaseError.message);
 
-      // 2. Submit to Netlify manually
+      // 2. Submit to Netlify with matching field names
       const netlifyFormData = {
         "form-name": "contact",
         ...formData
@@ -74,7 +70,7 @@ const ContactForm = () => {
         body: encode(netlifyFormData)
       });
 
-      // 3. Push to dataLayer (create if doesn't exist)
+      // 3. Push to dataLayer (init if needed)
       if (typeof window !== 'undefined') {
         if (!window.dataLayer) window.dataLayer = [];
         window.dataLayer.push({
@@ -101,7 +97,7 @@ const ContactForm = () => {
     }
   };
 
-  // Confirmation state
+  // Success state
   if (isSubmitted) {
     return (
       <section id="contact-form" className="section-padding bg-gray-50">
@@ -152,9 +148,8 @@ const ContactForm = () => {
               className="space-y-6 bg-white p-8 rounded-lg shadow-lg"
               autoComplete="off"
             >
-              {/* Hidden field for Netlify */}
+              {/* Hidden field for Netlify detection */}
               <input type="hidden" name="form-name" value="contact" />
-              {/* Hidden gclid */}
               <input type="hidden" name="gclid" value={formData.gclid} />
               <p hidden>
                 <label>
@@ -176,7 +171,6 @@ const ContactForm = () => {
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
                   />
                 </div>
-
                 <div>
                   <label className="block text-foreground font-rubik font-medium mb-2">
                     Email *
