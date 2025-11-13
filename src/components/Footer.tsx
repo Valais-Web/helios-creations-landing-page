@@ -16,7 +16,7 @@ const Footer = () => {
             <img 
               src={valaisWebLogo} 
               alt="Valais Web" 
-              className="h-4 inline-block"
+              className="h-5 inline-block"
             />
           </a>
         </p>
