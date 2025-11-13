@@ -10,7 +10,7 @@ const Footer = () => {
             href="https://valaisweb.ch" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 hover:text-background/80 transition-colors ml-1"
+            className="inline-flex items-center gap-1 hover:text-background/80 transition-colors ml-1"
           >
             Site web créé par
             <img 
