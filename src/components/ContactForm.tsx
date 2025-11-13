@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 // DataLayer for analytics
@@ -48,14 +47,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // 1. Store in Supabase (optional)
-      const { error: supabaseError } = await supabase
-        .from('contact_submissions')
-        .insert([{ ...formData }]);
-
-      if (supabaseError) throw new Error(supabaseError.message);
-
-      // 2. Submit to Netlify (must include "form-name" field)
+      // 1. Submit to Netlify (must include "form-name" field)
       const netlifyFormData = {
         "form-name": "contact",
         ...formData
@@ -67,7 +59,7 @@ const ContactForm = () => {
         body: encode(netlifyFormData)
       });
 
-      // 3. DataLayer push (for GTM etc)
+      // 2. DataLayer push (for GTM etc)
       if (typeof window !== 'undefined') {
         if (!window.dataLayer) window.dataLayer = [];
         window.dataLayer.push({
@@ -176,7 +168,7 @@ const ContactForm = () => {
                     value={formData.email}
                     onChange={e => handleInputChange('email', e.target.value)}
                     className="w-full p-3 border border-gray-200 rounded-lg focus:border-primary focus:outline-none"
-                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}"
                     title="Veuillez entrer une adresse email valide (ex: nom@exemple.com)"
                   />
                 </div>
