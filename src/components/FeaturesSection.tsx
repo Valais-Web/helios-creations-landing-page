@@ -1,86 +1,79 @@
-import { Check } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import {
+  Frame,
+  Sliders,
+  CloudRain,
+  Smartphone,
+  Zap,
+  Music,
+  Plug,
+  Lightbulb,
+  Flame,
+  PanelsTopLeft,
+  Settings2,
+  Sparkles,
+} from 'lucide-react';
+import YouTubeFacade from './YouTubeFacade';
+
+const features = [
+  { icon: Frame, label: 'Structure durable en aluminium' },
+  { icon: Sliders, label: 'Lames orientables' },
+  { icon: CloudRain, label: 'Capteur vent, pluie et soleil' },
+  { icon: Smartphone, label: 'Contrôle via l’application' },
+  { icon: Zap, label: 'Motorisation automatique' },
+  { icon: Music, label: 'Haut-parleurs Bluetooth' },
+  { icon: Plug, label: 'Prises de courant et USB' },
+  { icon: Lightbulb, label: 'Éclairage LED intégré' },
+  { icon: Flame, label: 'Chauffage infrarouge' },
+  { icon: PanelsTopLeft, label: 'Fermetures latérales' },
+  { icon: Settings2, label: 'Complètement personnalisable' },
+  { icon: Sparkles, label: 'Et bien plus encore' },
+];
+
+const scrollToForm = () =>
+  document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' });
 
 const FeaturesSection = () => {
-  const videoRef = useRef<HTMLIFrameElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.5 }
-    );
-
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const videoSrc = isInView 
-    ? "https://www.youtube.com/embed/9PrgaUNNLWw?autoplay=1&mute=1&start=3&controls=1"
-    : "https://www.youtube.com/embed/9PrgaUNNLWw?start=3&controls=1";
-
-  const features = [
-    "Structure durable en aluminium",
-    "Lames orientables", 
-    "Capteur vent/pluie/soleil",
-    "Contrôle via l'application",
-    "Motorisation automatique",
-    "Hauts-parleurs Bluetooth",
-    "Prises de courant et USB",
-    "Éclairage LED intégré",
-    "Chauffage infrarouge",
-    "Fermetures latérales",
-    "Complètement personnalisable",
-    "Et plus encore..."
-  ];
-
   return (
     <section className="section-padding bg-background">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary text-center mb-12">
-          Des pergolas d'exception
-        </h2>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <div key={index} className="flex items-center gap-3">
-              <Check className="text-primary flex-shrink-0" size={20} />
-              <span className="text-foreground font-rubik text-lg">
-                {feature}
-              </span>
-            </div>
-          ))}
-        </div>
-        
-        {/* Video Section */}
-        <div className="mt-12 max-w-4xl mx-auto">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-lg">
-            <iframe
-              ref={videoRef}
-              width="100%"
-              height="100%"
-              src={videoSrc}
-              title="Hélios Créations | Pergolas"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0"
-            />
-          </div>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold font-red-hat text-primary mb-4">
+            Des pergolas d’exception
+          </h2>
+          <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
+            Une conception haut de gamme et un équipement complet pour profiter de votre
+            extérieur en toute saison.
+          </p>
         </div>
 
-        {/* CTA Button */}
+        <ul className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {features.map(({ icon: Icon, label }) => (
+            <li
+              key={label}
+              className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-4 hover:border-primary/40 hover:shadow-md transition-all"
+            >
+              <span className="w-11 h-11 flex-shrink-0 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Icon className="text-primary" size={22} strokeWidth={1.75} />
+              </span>
+              <span className="text-foreground font-rubik font-medium">{label}</span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-14 max-w-4xl mx-auto">
+          <YouTubeFacade
+            videoId="9PrgaUNNLWw"
+            start={3}
+            title="Hélios Créations | Pergolas"
+          />
+        </div>
+
         <div className="text-center mt-12">
-          <button 
-            className="btn-helios-cta"
-            onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+          <button
+            onClick={scrollToForm}
+            className="bg-primary text-primary-foreground font-semibold px-8 py-4 rounded-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-lg"
           >
-            DEMANDEZ UN DEVIS GRATUIT
+            Demander un devis gratuit
           </button>
         </div>
       </div>
