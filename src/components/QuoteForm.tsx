@@ -66,11 +66,9 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
   const validate = (): boolean => {
     const e: Partial<Record<keyof FormState, string>> = {};
     if (!formData.name.trim()) e.name = 'Ce champ est requis';
-    if (!isCompact) {
-      if (!formData.email.trim()) e.email = 'Ce champ est requis';
-      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email))
-        e.email = 'Adresse email invalide';
-    }
+    if (!formData.email.trim()) e.email = 'Ce champ est requis';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(formData.email))
+      e.email = 'Adresse email invalide';
     if (!formData.phone.trim()) e.phone = 'Ce champ est requis';
     if (!formData.postal_code.trim()) e.postal_code = 'Ce champ est requis';
     else if (!/^\d{4}$/.test(formData.postal_code))
@@ -139,10 +137,17 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
     );
   }
 
-  const inputBase =
-    'w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors bg-white text-foreground';
-  const labelBase = 'block text-foreground font-rubik font-medium mb-1.5 text-sm';
-  const errorText = 'text-sm text-primary mt-1';
+  const inputBase = isCompact
+    ? 'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors bg-white text-foreground text-sm'
+    : 'w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors bg-white text-foreground';
+  const labelBase = isCompact
+    ? 'block text-foreground font-rubik font-medium mb-1 text-xs'
+    : 'block text-foreground font-rubik font-medium mb-1.5 text-sm';
+  const errorText = isCompact ? 'text-xs text-primary mt-0.5' : 'text-sm text-primary mt-1';
+
+  const cardClass = isCompact
+    ? `bg-white rounded-lg shadow-xl p-4 md:p-5 space-y-3 w-full max-w-[380px] mx-auto lg:mx-0 ${className}`
+    : `bg-white rounded-lg shadow-xl p-6 md:p-8 space-y-4 ${className}`;
 
   return (
     <form
@@ -151,7 +156,7 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
       data-netlify="true"
       data-netlify-honeypot="bot-field"
       onSubmit={handleSubmit}
-      className={`bg-white rounded-lg shadow-xl p-6 md:p-8 space-y-4 ${className}`}
+      className={cardClass}
       autoComplete="on"
       noValidate
     >
@@ -180,26 +185,24 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
         {errors.name && <p className={errorText}>{errors.name}</p>}
       </div>
 
-      {!isCompact && (
-        <div>
-          <label htmlFor={`email-${variant}`} className={labelBase}>
-            Email <span className="text-primary">*</span>
-          </label>
-          <input
-            id={`email-${variant}`}
-            name="email"
-            type="email"
-            autoComplete="email"
-            value={formData.email}
-            onChange={(e) => setField('email', e.target.value)}
-            className={`${inputBase} ${errors.email ? 'border-primary' : 'border-gray-200'}`}
-            aria-invalid={!!errors.email}
-          />
-          {errors.email && <p className={errorText}>{errors.email}</p>}
-        </div>
-      )}
+      <div>
+        <label htmlFor={`email-${variant}`} className={labelBase}>
+          Email <span className="text-primary">*</span>
+        </label>
+        <input
+          id={`email-${variant}`}
+          name="email"
+          type="email"
+          autoComplete="email"
+          value={formData.email}
+          onChange={(e) => setField('email', e.target.value)}
+          className={`${inputBase} ${errors.email ? 'border-primary' : 'border-gray-200'}`}
+          aria-invalid={!!errors.email}
+        />
+        {errors.email && <p className={errorText}>{errors.email}</p>}
+      </div>
 
-      <div className={isCompact ? '' : 'grid md:grid-cols-2 gap-4'}>
+      <div className="grid grid-cols-2 gap-3">
         <div>
           <label htmlFor={`phone-${variant}`} className={labelBase}>
             Téléphone <span className="text-primary">*</span>
@@ -218,7 +221,7 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
           {errors.phone && <p className={errorText}>{errors.phone}</p>}
         </div>
 
-        <div className={isCompact ? 'mt-4' : ''}>
+        <div>
           <label htmlFor={`postal-${variant}`} className={labelBase}>
             Code postal <span className="text-primary">*</span>
           </label>
@@ -279,7 +282,9 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-primary text-primary-foreground font-semibold py-4 px-6 rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base shadow-md hover:shadow-lg"
+        className={`w-full bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-md hover:shadow-lg ${
+          isCompact ? 'py-3 px-4 text-sm' : 'py-4 px-6 text-base'
+        }`}
       >
         {isSubmitting ? (
           <>
@@ -290,12 +295,20 @@ const QuoteForm = ({ variant = 'full', formLocation = 'default', className = '' 
         )}
       </button>
 
-      <p className="text-xs text-muted-foreground flex items-start gap-2 leading-relaxed">
+      <p
+        className={`text-muted-foreground flex items-start gap-2 leading-relaxed ${
+          isCompact ? 'text-[11px]' : 'text-xs'
+        }`}
+      >
         <ShieldCheck className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-        <span>
-          Vos données restent confidentielles et ne sont jamais transmises à des tiers.
-          Un expert vous rappelle sous 24h ouvrées.
-        </span>
+        {isCompact ? (
+          <span>Vos données restent confidentielles. Réponse sous 24h ouvrées.</span>
+        ) : (
+          <span>
+            Vos données restent confidentielles et ne sont jamais transmises à des tiers.
+            Un expert vous rappelle sous 24h ouvrées.
+          </span>
+        )}
       </p>
     </form>
   );
