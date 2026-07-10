@@ -22,6 +22,7 @@ const Index = () => {
       <PergolasSlider />
       <FeaturesSection />
       <ProcessSection />
+      <CompanySection />
       <TestimonialsSection />
       <FAQSection />
       <ContactForm />
