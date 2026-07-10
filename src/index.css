@@ -118,17 +118,11 @@ All colors MUST be HSL.
     font-family: 'Rubik', sans-serif;
   }
 
-  /* Custom button styles */
-  .btn-helios {
-    @apply px-14 py-5 uppercase font-medium tracking-wider transition-all duration-300;
-    @apply bg-secondary text-foreground hover:bg-primary hover:text-primary-foreground;
-    border-radius: 0;
-  }
-
+  /* Unified CTA — orange, une seule identité visuelle pour toutes les actions */
+  .btn-helios,
   .btn-helios-cta {
-    @apply px-14 py-5 uppercase font-medium tracking-wider transition-all duration-300;
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg hover:scale-105;
-    border-radius: 0;
+    @apply px-8 py-4 font-semibold tracking-wide rounded-lg transition-all duration-200;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg;
   }
 
   /* Section spacing */
