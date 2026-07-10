@@ -1,7 +1,8 @@
 import { Check, Star } from 'lucide-react';
 import QuoteForm from './QuoteForm';
 
-const HERO_IMAGE = '/lovable-uploads/9882f6b3-2664-43eb-874a-38a527d25447.png';
+const HERO_IMAGE = '/lovable-uploads/dee3b2b2-b17b-4947-88b5-6fd4795df7f4.png';
+const LOUVERS_DETAIL = '/lovable-uploads/ee9d1e67-5715-4992-8cc9-8adc2809cf5c.png';
 
 const Hero = () => {
   const benefits = [
@@ -13,24 +14,30 @@ const Hero = () => {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Background image + overlay */}
+      {/* Background image + horizontal gradient overlay */}
       <div className="absolute inset-0">
         <img
           src={HERO_IMAGE}
           alt=""
           fetchPriority="high"
           decoding="async"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:hidden" />
+        {/* Desktop: dégradé horizontal, dense à gauche, transparent au milieu */}
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-black/85 via-black/55 to-transparent" />
+        {/* Mobile: dégradé vertical léger pour lisibilité */}
+        <div className="absolute inset-0 md:hidden bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 lg:px-12 pt-8 pb-16 md:pt-12 md:pb-24">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 md:px-8 lg:px-12 pt-8 pb-16 md:pt-14 md:pb-28">
+        <div className="grid lg:grid-cols-[1.15fr_auto] gap-10 lg:gap-14 items-center">
           {/* Left: copy */}
           <div className="text-white">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-bold font-red-hat leading-[1.15] mb-6">
+            <p className="inline-block bg-white/95 text-primary text-[11px] md:text-xs font-bold uppercase tracking-[0.15em] px-3 py-1.5 rounded mb-5 shadow-sm">
+              Pergolas bioclimatiques sur-mesure
+            </p>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-bold font-red-hat leading-[1.15] mb-6 drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
               Votre pergola bioclimatique sur-mesure, posée par nos équipes en Suisse
               romande
             </h1>
@@ -41,7 +48,7 @@ const Hero = () => {
                   <span className="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                     <Check className="text-primary-foreground" size={14} strokeWidth={3} />
                   </span>
-                  <span className="font-rubik text-base md:text-lg leading-relaxed text-white/95">
+                  <span className="font-rubik text-base md:text-lg leading-relaxed text-white/95 drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
                     {benefit}
                   </span>
                 </li>
@@ -70,8 +77,8 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right: form card */}
-          <div className="lg:pl-4">
+          {/* Right: form card (compact, narrow) */}
+          <div className="w-full lg:w-[380px]">
             <div className="mb-3 text-center lg:text-left">
               <p className="inline-block bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider px-3 py-1 rounded">
                 Devis gratuit en 2 min
@@ -79,6 +86,25 @@ const Hero = () => {
             </div>
             <QuoteForm variant="compact" formLocation="hero" />
           </div>
+        </div>
+      </div>
+
+      {/* Louvers detail vignette, bottom-left of the image area — desktop only */}
+      <div className="hidden lg:block absolute bottom-6 left-6 z-20 w-[170px] rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/20 bg-white">
+        <img
+          src={LOUVERS_DETAIL}
+          alt="Gros plan sur les lames orientables de la pergola bioclimatique"
+          loading="lazy"
+          decoding="async"
+          className="w-full h-[120px] object-cover"
+        />
+        <div className="px-3 py-2 bg-white">
+          <p className="text-[11px] font-semibold text-primary uppercase tracking-wide">
+            Lames orientables
+          </p>
+          <p className="text-[10px] text-gray-600 leading-tight">
+            Contrôlez soleil, ombre et pluie
+          </p>
         </div>
       </div>
     </section>
